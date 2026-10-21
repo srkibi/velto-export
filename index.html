@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#161c23">
+  <title>Velto · Export Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="#" class="brand" aria-label="Velto Export Studio"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>velto<span class="brand-tag">EXPORT STUDIO</span></a>
+    <span class="local-badge"><span></span> Processamento no seu navegador</span>
+    <button class="quiet" id="demo-button">Abrir demonstração <span>↗</span></button>
+  </header>
+  <main class="studio">
+    <aside class="library">
+      <div class="section-eyebrow">LIBRARY <span>01</span></div>
+      <button class="nav-item active" id="open-project"><span class="nav-icon">▤</span> Projeto <span class="count" id="track-count">0</span></button>
+      <button class="nav-item" id="open-samples"><span class="nav-icon">◫</span> Samples originais <span class="count" id="sample-count">0</span></button>
+      <input type="file" id="project-input" accept="application/json,.json,.velto" hidden>
+      <input type="file" id="samples-input" accept="audio/*,.wav,.mp3,.ogg,.flac,.m4a,.aif,.aiff" multiple hidden>
+      <div class="library-divider"></div>
+      <div class="section-eyebrow">SEU ARQUIVO, SEU SOM</div>
+      <p class="side-copy">Carregue os dados do seu set e os arquivos de áudio originais. A mixagem acontece aqui.</p>
+      <div class="source-list" id="source-list"><div class="source-empty">Os samples usados pelo arranjo aparecerão nesta lista.</div></div>
+      <div class="private-note"><span>⌁</span><div><strong>Fica no seu dispositivo.</strong><br>Os arquivos não são enviados para um servidor.</div></div>
+    </aside>
+
+    <section class="workspace">
+      <div class="project-bar">
+        <div><div class="section-eyebrow">ARRANGEMENT</div><h1 id="project-name">Seu próximo lançamento.</h1><p id="project-subtitle">Do set para um arquivo que você pode guardar.</p></div>
+        <div class="transport"><span id="tempo">—</span><small>BPM</small><div class="transport-divider"></div><span id="bars">—</span><small>COMPASSOS</small></div>
+      </div>
+      <div class="arrangement" id="arrangement">
+        <div class="empty-state" id="empty-state"><div class="empty-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><h2>Traga o seu projeto.</h2><p>Abra um arquivo JSON do Velto ou cole os dados exportados para visualizar seu arranjo.</p><button class="primary" id="load-empty">Carregar projeto <span>＋</span></button><button class="text-button" id="paste-button">Colar dados do projeto</button><span class="empty-hint">Quer experimentar? Abra a demonstração no topo.</span></div>
+        <div class="timeline" id="timeline" hidden></div>
+      </div>
+      <div class="master-strip"><div class="master-label"><span class="master-dot"></span><strong>Master</strong><span id="master-fx">Aguardando projeto</span></div><div class="master-meter" aria-hidden="true"><i id="master-level"></i></div><span class="mono" id="peak-value">— dBFS</span></div>
+      <div class="bottom-dock">
+        <div class="dock-tabs"><button class="dock-tab active" data-tab="output">OUTPUT</button><button class="dock-tab" data-tab="details">COMPATIBILIDADE</button><div class="dock-meta">STEREO · PCM 16-BIT</div></div>
+        <div id="output-tab" class="dock-body"><div class="output-heading"><div><div class="section-eyebrow">PRÉVIA DA MIXAGEM</div><h2 id="render-title">Pronto para criar.</h2><p id="render-subtitle">O arquivo WAV aparecerá aqui depois de renderizado.</p></div><span class="format-pill">.WAV</span></div><canvas id="waveform" height="110" aria-label="Forma de onda da mixagem renderizada"></canvas><audio controls id="audio-preview" hidden aria-label="Ouvir mixagem renderizada"></audio></div>
+        <div id="details-tab" class="dock-body" hidden><div class="compatibility-intro">O renderizador usa Web Audio. Algoritmos de efeitos podem soar diferentes dos usados no Roblox. Ele preserva o arranjo, as cadeias de faixa e a Master; efeitos incompatíveis bloqueiam o WAV.</div><ul id="compatibility-list"><li>Carregue um projeto para verificar a compatibilidade.</li></ul><p class="legal-note">Um ID de áudio do Roblox não é o arquivo de som. Use arquivos originais que você tem direito de usar fora do Roblox. Não buscamos nem extraímos áudios da Creator Store.</p></div>
+      </div>
+    </section>
+
+    <aside class="export-panel">
+      <div class="section-eyebrow">EXPORT <span>02</span></div><h2>Leve seu som.</h2><p class="export-intro">Transforme o arranjo em um arquivo estéreo.</p>
+      <label class="field-label" for="filename">NOME DO ARQUIVO</label><input class="text-field" id="filename" value="velto-mix" maxlength="100" spellcheck="false">
+      <div class="field-row"><div><label class="field-label" for="sample-rate">SAMPLE RATE</label><select id="sample-rate"><option value="44100">44.1 kHz</option><option value="48000">48 kHz</option><option value="22050">22.05 kHz</option></select></div><div><label class="field-label" for="tail">CAUDA DOS FX</label><select id="tail"><option value="2">2 segundos</option><option value="0">Sem cauda</option><option value="5">5 segundos</option><option value="10">10 segundos</option></select></div></div>
+      <div class="render-summary"><div><span>Formato</span><strong>WAV / PCM 16</strong></div><div><span>Canais</span><strong>Estéreo</strong></div><div><span>Duração estimada</span><strong id="duration">—</strong></div><div><span>Tamanho estimado</span><strong id="file-size">—</strong></div></div>
+      <label class="check-option"><input type="checkbox" id="approximate-synth"><span><strong>Osciladores do navegador</strong><small>Alternativa aproximada para synths sem os samples originais. Não reproduz o timbre exato do Velto.</small></span></label>
+      <label class="check-option"><input type="checkbox" id="accept-engine"><span><strong>Usar o motor Web Audio</strong><small>Entendo que os algoritmos de efeitos e a renderização podem diferir do Roblox.</small></span></label>
+      <button class="primary render-button" id="render-button" disabled><span id="render-button-label">Renderizar WAV</span><span>↓</span></button>
+      <div class="progress" id="progress" hidden><i></i></div><p class="status" id="status" role="status" aria-live="polite">Carregue um projeto para começar.</p>
+      <a class="download-wav" id="download-wav" hidden>Baixar mixagem WAV <span>↓</span></a>
+      <div class="export-divider"></div><div class="section-eyebrow">DADOS DO SET</div><button class="secondary" id="json-button" disabled>Baixar projeto JSON <span>↓</span></button><button class="secondary" id="midi-button" disabled>Baixar notas MIDI <span>↓</span></button><p class="tiny-copy">JSON e MIDI não precisam dos arquivos de áudio. O MIDI contém notas, andamento e nomes de faixas; não inclui instrumentos ou efeitos.</p>
+    </aside>
+  </main>
+  <footer><span>VELTO · MADE FOR YOUR NEXT IDEA</span><span>Renderização local / sem uploads / sem conta</span></footer>
+  <dialog id="paste-dialog"><form method="dialog"><div class="modal-title"><h2>Colar projeto</h2><button value="cancel" class="quiet" aria-label="Fechar">✕</button></div><p>Cole os dados JSON exportados pelo Velto.</p><textarea id="project-data" spellcheck="false" placeholder='{"Format":"Velto Project", …}'></textarea><div class="modal-actions"><button value="cancel" class="secondary">Cancelar</button><button type="button" id="load-pasted" class="primary">Abrir projeto</button></div><p id="paste-error" class="error"></p></form></dialog>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
